@@ -240,10 +240,15 @@ btn_solution = tk.Button(btn_frame, text="Показать решение", comm
 btn_generate.grid(row=0, column=0, sticky="ew", padx=(0,6))
 btn_solution.grid(row=0, column=1, sticky="ew", padx=(6,0))
 
+# настройка сетки
+
+grid_frame = tk.Frame(root, bg=grid_gap_bg)
+grid_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+root.grid_rowconfigure(1, weight=1)
+root.grid_columnconfigure(0, weight=1)
 
 
-
-# Настройка сетки внутри фрейма
 for i in range(9):
     grid_frame.grid_rowconfigure(i, weight=1)
     grid_frame.grid_columnconfigure(i, weight=1)
@@ -265,29 +270,30 @@ for rows in range(9):
         e.grid(row=rows, column=colums, sticky="nsew", padx=(left, right), pady=(top, bottom))
         entries[rows][colums] = e
 
-# Кнопка проверки решения
+# кнопка проверки
 btn_check = tk.Button(root, text="Проверить решение", command=check_solution, font=("Arial", 12))
 btn_check.grid(row=3, column=0, sticky="ew", padx=10, pady=(0,10))
 
-# Квадратные клетки: при старте подстраиваем minsize и шрифт,
-# но шрифт не станет меньше базового 20 пикселей
+# для квадратных клеток при старте
+
 def on_start_resize():
     width = grid_frame.winfo_width()
     height = grid_frame.winfo_height()
     if width <= 0 or height <= 0:
         return
+    
     cell_size = int(min(width / 9, height / 9))
     for i in range(9):
         grid_frame.grid_rowconfigure(i, minsize=cell_size)
         grid_frame.grid_columnconfigure(i, minsize=cell_size)
-    # шрифт не опустится ниже 20
+
     new_font_size = max(20, int(cell_size * 0.55))
     shared_font.configure(size=new_font_size)
 
 root.update_idletasks()
 on_start_resize()
 
-# Глобальные переменные
+# глобал переменные
 current_solution = None
 initial_puzzle = [[0]*9 for _ in range(9)]
 
